@@ -1,0 +1,56 @@
+# Use postgres/example user/password credentials
+version: "3.9"
+
+services:
+  app:
+    image: "jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    ports:
+      - "8090:81"
+      - "443:443"
+      - "80:80"
+
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PORT: 5432
+
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  initdb:
+    image: ladyops/backend
+
+    entrypoint: ["./prestart.sh"]
+  backend:
+    depends_on:
+      - initdb
+      - db
+    image: ladyops/backend
+
+    links:
+      - "frontend"
+    ports:
+      - 8000:8000
+  frontend:
+    image: ladyops/frontend
+    ports:
+      - 5173:5173
+
+networks:
+  hng:

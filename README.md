@@ -18,3 +18,18 @@ To get started with this template, please follow the instructions in the respect
 - [Frontend README](./frontend/README.md)
 - [Backend README](./backend/README.md)
 
+## Project Setup
+
+To set up this project stack, you need to have the following installed:
+
+1. Docker deamon
+2. Docker compose
+   you also need to create the following folders at the same level as the docker compose files:
+3. /letsencrypt
+4. /data
+   These folders are mounted to the nginx proxy-manager container.
+
+To run the application run the following command:
+
+1. cd /path/to/docker-compose.yaml
+2. docker-compose up -d
