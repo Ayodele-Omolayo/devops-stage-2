@@ -34,23 +34,25 @@ services:
       - 8080:8080
 
   initdb:
-    image: ladyops/backend
+    build:
+      context: backend
+      dockerfile: Dockerfile
 
     entrypoint: ["./prestart.sh"]
   backend:
     depends_on:
       - initdb
       - db
-    image: ladyops/backend
-
+    build:
+      context: backend
+      dockerfile: Dockerfile
     links:
       - "frontend"
     ports:
       - 8000:8000
   frontend:
-    image: ladyops/frontend
+    build:
+      context: backend
+      dockerfile: Dockerfile
     ports:
       - 5173:5173
-
-networks:
-  hng:
